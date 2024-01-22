@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+
+    #container {
+      width: 60%;
+      margin: 50px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #inputBox {
+      width: calc(100% - 16px);
+      margin-bottom: 10px;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #extractButton {
+      padding: 10px 15px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    #extractButton:hover {
+      background-color: #45a049;
+    }
+
+    #outputBox {
+      width: calc(100% - 16px);
+      height: 100px;
+      padding: 8px;
+      box-sizing: border-box;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+  <script>
+    function extractKeywords() {
+      var inputText = document.getElementById('inputBox').value;
+      var words = inputText.match(/\b\w+\b/g) || [];
+      var uniqueWords = [...new Set(words)];
+      document.getElementById('outputBox').value = uniqueWords.join(', ');
+    }
+  </script>
+</head>
+<body>
+    <div id="container">
+      <h2>Keyword Extraction</h2>
+      <form action="/extract" method="post">
+        <input type="text" name="inputText" id="inputBox" placeholder="Enter text...">
+        <br>
+        <button type="submit" id="extractButton">Extract Keywords</button>
+      </form>
+      <br>
+      <div id="outputContainer">
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% else %}
+            {% if wordcloud %}
+            <h3>Word Cloud:</h3>
+            <img src="data:image/png;base64,{{ wordcloud }}" alt="Word Cloud">
+            {% else %}
+            <p>No Word Cloud available.</p>
+            {% endif %}
+        {% endif %}
+      </div>
+    </div>
+</body>
+</html>
